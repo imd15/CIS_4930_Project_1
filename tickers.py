@@ -2,7 +2,7 @@ import sys
 import requests as r
 from iex import Stock
 
-def save_tickers(n):
+def save_tickers(n, fileName):
     #URL = r.get("https://www.nasdaq.com/screening/companies-by-industry.aspx?exchange=NASDAQ&render=download").text
     tickerList = []
     pure = r.get("https://www.nasdaq.com/screening/companies-by-industry.aspx?exchange=NASDAQ&pagesize=150").text #get pure text from the website
@@ -14,7 +14,7 @@ def save_tickers(n):
             break
         else:
             try:
-                subst = curr[curr.rfind("symbol/")::1] # parse all lines until 'symbol/' is found https://www.nasdaq.com/symbol/asps/stock-report"> 
+                subst = curr[curr.rfind("symbol/")::1] # parse all lines until 'symbol/' is found https://www.nasdaq.com/symbol/asps/stock-report">
                 ticker = subst[subst.find("/")+1::1] # parse subst which contains 'asps/stock-report">'
                 ticker2 = ticker[:ticker.find("/")] #parse to just get the symbol
                 if ticker2.find("\"") == -1 and ticker2 != "":
@@ -23,11 +23,13 @@ def save_tickers(n):
                     tickerList.append(ticker2)
             except:
                 pass
-    
-    file = open("tickers.txt","w") #creates ticker.text to write to it.
+
+    file = open(fileName,"w") #creates ticker.text to write to it.
     file.write("\n".join(tickerList)) #puts everything that was in the list created with tickers on a new line
     file.close() #closes file
 
 
 if __name__ == "__main__":
-    save_tickers(int(sys.argv[1]))
+    # argv[1] = number of tickers
+    # argv[2] = filename
+    save_tickers(int(sys.argv[1]), sys.argv[2])
