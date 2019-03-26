@@ -1,4 +1,4 @@
-import sys
+import sys,io
 import requests as r
 from iex import Stock
 
@@ -18,7 +18,10 @@ def save_tickers(n, fileName):
                 ticker = subst[subst.find("/")+1::1] # parse subst which contains 'asps/stock-report">'
                 ticker2 = ticker[:ticker.find("/")] #parse to just get the symbol
                 if ticker2.find("\"") == -1 and ticker2 != "":
+                    outputRedirect = io.StringIO() #redirects output so it doesnt print to console
+                    sys.stdout = outputRedirect #sets standard out to output redirect
                     Stock(ticker2).price() ## checks if valid ticker, if its not found go to except
+                    sys.stdout = sys.__stdout__ #resets standard out back to stdout
                     i = i +1
                     tickerList.append(ticker2)
             except:
