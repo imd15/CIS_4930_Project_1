@@ -7,14 +7,14 @@ from iex import Stock
 
 def UpdateStockInformation(ticker):
     URL = f"https://ws-api.iextrading.com/1.0/stock/{x.strip()}/quote/"
-    ahhhhh = r.get(URL).text
-    yeet = json.loads(ahhhhh)
+    pureURLtext = r.get(URL).text
+    textToJson = json.loads(pureURLtext) #creates dict from what was in url
     Titles = ["symbol","latestPrice", "latestVolume","close","open","low","high"]
     timee = strftime("%H:%M")
     L = [timee]
     print(Titles)
     for i in Titles:
-        L.append(yeet[i])
+        L.append(textToJson[i])
     
     print(L)
     
