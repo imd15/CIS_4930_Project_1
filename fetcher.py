@@ -11,36 +11,37 @@ def UpdateStockInformation(ticker):
     pureURLtext = r.get(URL).text
     textToJson = json.loads(pureURLtext) #creates dict from what was in url
     Titles = ["symbol","latestPrice", "latestVolume","close","open","low","high"]
-    timee = strftime("%H:%M")
+    timee = strftime("%H:%M:%S")
     L = [timee]
-    print(Titles)
     for i in Titles:
         L.append(textToJson[i])
     
-    print(L)
-    
-    #print(ahhhhh)
-    
-    return
+    return L
 
-def indefiniteUpdate(ticker_file):
-    for x in ticker_file:
-        if time.time() < time_limit:
-            UpdateStockInformation(x)
-        else:
-            break
+def indefiniteUpdate(ticker_file, time_limit):
+    while time.time() < time_limit:
+        HeaderWritten = False
+        for x in ticker_file:
+            if time.time() < time_limit:
+                L = UpdateStockInformation(x)
+                with open("info.csv", "a") as csv_file:
+                    fieldnames = ["Time", "Ticker", "latestPrice", "latestVolume", "Close", "Open", "low", "high"]
+                    writer = csv.DictWriter(csv_file, fieldnames = fieldnames)
+                    if not HeaderWritten:
+                        writer.writeheader()
+                        HeaderWritten = True
+                    writer.writerow({'Time': L[0], 'Ticker': L[1],'latestPrice': L[2], 'latestVolume': L[3], 'Close': L[4], 'Open': L[5], 'low': L[6], 'high': L[7]})
+            else:
+                break
+    ticker_file.close()
 
 if __name__ == "__main__":
-    time_limit =  time.time() + 10#sys.argv[1]
+    time_limit =  time.time() + 10 #sys.argv[1]
 
     ticker_filename = "tickers.txt" #sys.argv[2]
     #info_filename = sys.argv[3]
-    file = open("info.csv",'w')
-    
-    
-    
+    #file = open("info.csv",'a')
 
     while time.time() < time_limit:
         ticker_file = open(ticker_filename, "r")
-        indefiniteUpdate(ticker_file)
-        
+        indefiniteUpdate(ticker_file, time_limit)
