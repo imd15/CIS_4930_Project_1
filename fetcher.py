@@ -18,30 +18,34 @@ def UpdateStockInformation(ticker):
     
     return L
 
-def indefiniteUpdate(ticker_file, time_limit):
-    while time.time() < time_limit:
-        HeaderWritten = False
+def indefiniteUpdate(ticker_file,info_filename, time_limit):
+        
         for x in ticker_file:
             if time.time() < time_limit:
                 L = UpdateStockInformation(x)
-                with open("info.csv", "a") as csv_file:
+                with open(info_filename, "a") as csv_file:
                     fieldnames = ["Time", "Ticker", "latestPrice", "latestVolume", "Close", "Open", "low", "high"]
                     writer = csv.DictWriter(csv_file, fieldnames = fieldnames)
-                    if not HeaderWritten:
-                        writer.writeheader()
-                        HeaderWritten = True
                     writer.writerow({'Time': L[0], 'Ticker': L[1],'latestPrice': L[2], 'latestVolume': L[3], 'Close': L[4], 'Open': L[5], 'low': L[6], 'high': L[7]})
+                    csv_file.close()
             else:
                 break
-    ticker_file.close()
+    
 
 if __name__ == "__main__":
-    time_limit =  time.time() + 10 #sys.argv[1]
+    time_limit =  time.time() + int(sys.argv[1])
 
-    ticker_filename = "tickers.txt" #sys.argv[2]
-    #info_filename = sys.argv[3]
+    ticker_filename = sys.argv[2]
+    info_filename = sys.argv[3]
     #file = open("info.csv",'a')
+    HeaderWritten = False
 
+    with open(info_filename,'w') as info: ##this just goes ahead and prints the headers into the first line of the file
+        headerWriter = csv.writer(info, delimiter=',')
+
+        headerWriter.writerow(["Time", "Ticker", "latestPrice", "latestVolume", "Close", "Open", "low", "high"])
+    
     while time.time() < time_limit:
         ticker_file = open(ticker_filename, "r")
-        indefiniteUpdate(ticker_file, time_limit)
+        indefiniteUpdate(ticker_file,info_filename, time_limit)
+    ticker_file.close()
