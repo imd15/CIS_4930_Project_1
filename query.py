@@ -18,17 +18,13 @@ def Query(info_filename, the_time, ticker):
 
 if __name__ == "__main__":
     # -verbose  = sys.argv[1]
-    verbose = sys.argv[1]
-    # -file = sys.argv[2]
-    # info_filename = sys.argv[3]
-    # –ticker = sys.argv[4]
-    # ticker = sys.argv[5]
-    # -time = sys.argv[6] --> Time sould be in HH:MM
-    # the_time = sys.argv[7]
-
-    info_filename = "info.csv"
-    the_time = 10
-    ticker = 'aaon'
+    verbose = sys.argv[2]
+    # -file = sys.argv[3]
+    info_filename = sys.argv[4]
+    # –ticker = sys.argv[5]
+    ticker = sys.argv[6]
+    # -time = sys.argv[7] --> Time sould be in HH:MM
+    the_time = sys.argv[8][0:5]
 
     # gather the necessary information on the ticker
     ticker_information = Query(info_filename, the_time, ticker.lower())
@@ -39,13 +35,17 @@ if __name__ == "__main__":
         reader = csv.reader(f)
         info_list = list(reader)
         column_names = info_list[0]
+        num_columns = len(column_names)
+        num_rows = len(info_list[1:])
 
     if verbose.lower() == "true":
+        # num rows and columns
         zipped = zip(column_names, ticker_information)
         for col, info in zipped:
             print(f"{col}: {info}")
         # print("verbose")
     else:
-        pass
+        for info in ticker_information:
+            print(info)
         # print("not verbose")
     
