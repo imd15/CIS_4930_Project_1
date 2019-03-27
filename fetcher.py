@@ -18,14 +18,14 @@ def UpdateStockInformation(ticker):
     
     return L
 
-def indefiniteUpdate(ticker_file, time_limit):
+def indefiniteUpdate(ticker_file,info_filename, time_limit):
     fieldnames = ["Time", "Ticker", "latestPrice", "latestVolume", "Close", "Open", "low", "high"]
     tickerList = []
     returnList = []
     for x in ticker_file:
         tickerList.append(x.strip())
 
-    with open("info.csv", "w") as csv_file:
+    with open(info_filename, "w") as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames = fieldnames)
         writer.writeheader()
         for x in tickerList:
@@ -41,11 +41,11 @@ def indefiniteUpdate(ticker_file, time_limit):
     return
 
 if __name__ == "__main__":
-    time_limit =  time.time() + 10 #sys.argv[1]
+    time_limit =  time.time() + int(sys.argv[1])
 
-    ticker_filename = "tickers.txt" #sys.argv[2]
-    # info_filename = sys.argv[3]
+    ticker_filename = sys.argv[2]
+    info_filename = sys.argv[3]
     # file = open("info.csv",'a')
 
     ticker_file = open(ticker_filename, "r")
-    indefiniteUpdate(ticker_file, time_limit)
+    indefiniteUpdate(ticker_file,info_filename, time_limit)
