@@ -19,17 +19,16 @@ def UpdateStockInformation(ticker):
     return L
 
 def indefiniteUpdate(ticker_file,info_filename, time_limit):
-        
-        for x in ticker_file:
-            if time.time() < time_limit:
-                L = UpdateStockInformation(x)
-                with open(info_filename, "a") as csv_file:
-                    fieldnames = ["Time", "Ticker", "latestPrice", "latestVolume", "Close", "Open", "low", "high"]
-                    writer = csv.DictWriter(csv_file, fieldnames = fieldnames)
-                    writer.writerow({'Time': L[0], 'Ticker': L[1],'latestPrice': L[2], 'latestVolume': L[3], 'Close': L[4], 'Open': L[5], 'low': L[6], 'high': L[7]})
-                    csv_file.close()
-            else:
-                break
+    for x in ticker_file:
+        if time.time() < time_limit:
+            L = UpdateStockInformation(x)
+            with open(info_filename, "a") as csv_file:
+                fieldnames = ["Time", "Ticker", "latestPrice", "latestVolume", "Close", "Open", "low", "high"]
+                writer = csv.DictWriter(csv_file, fieldnames = fieldnames)
+                writer.writerow({'Time': L[0], 'Ticker': L[1],'latestPrice': L[2], 'latestVolume': L[3], 'Close': L[4], 'Open': L[5], 'low': L[6], 'high': L[7]})
+                csv_file.close()
+        else:
+            break
     
 
 if __name__ == "__main__":
