@@ -30,6 +30,7 @@ def indefiniteUpdate(ticker_file,info_filename, time_limit):
             break    
 
 if __name__ == "__main__":
+    print("Program starting at: " + strftime("%H:%M:%S"))
     time_limit =  time.time() + int(sys.argv[1])
 
     ticker_filename = sys.argv[2]
@@ -43,6 +44,9 @@ if __name__ == "__main__":
         headerWriter.writerow(["Time", "Ticker", "latestPrice", "latestVolume", "Close", "Open", "low", "high"])
     
     while time.time() < time_limit:
+        starting_time = strftime("%H:%M")
         ticker_file = open(ticker_filename, "r")
         indefiniteUpdate(ticker_file,info_filename, time_limit)
         ticker_file.close()
+        while starting_time == strftime("%H:%M") and time.time() < time_limit:
+            pass
