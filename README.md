@@ -95,8 +95,7 @@ This module uses the *sklearn.linear model* to predict this. The information is 
 
 - In regards to both partners contributing equally, we only worked together and in-person so that we could easily communicate with each other. Most of the contributions made to this repo were made together and in-person, just so that we could both continue to work together.
 
-
-In addition, please note that we had trouble running query.py. It was working on Kiel's computer, but not Ian's. We are not sure as to what is specifically causing this, but everything does run. When running on it on Ian's computer, we recieve an error on line 14 that the x[1] (the index that references the ticker from the csv file, is out of range. 
+The Query issue has been fixed
 
 When running 
 > python3 query.py –verbose True –file info.csv –ticker YI –time 17:40
