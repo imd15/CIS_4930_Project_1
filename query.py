@@ -11,7 +11,10 @@ def Query(info_filename, the_time, ticker, column_names):
 
         the_tickers = []
         for x in info_list:
-            the_tickers.append(x[1].lower())    # extract just the ticker names from the CSV
+            if not x:
+                pass
+            else:
+                the_tickers.append(x[1].lower())    # extract just the ticker names from the CSV
         
         if ticker not in the_tickers:
             raise Exception(f"Ticker {ticker} not found in {info_filename}")
