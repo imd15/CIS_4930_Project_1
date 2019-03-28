@@ -27,8 +27,7 @@ def indefiniteUpdate(ticker_file,info_filename, time_limit):
                 writer.writerow({'Time': L[0], 'Ticker': L[1],'latestPrice': L[2], 'latestVolume': L[3], 'Close': L[4], 'Open': L[5], 'low': L[6], 'high': L[7]})
                 csv_file.close()
         else:
-            break
-    
+            break    
 
 if __name__ == "__main__":
     time_limit =  time.time() + int(sys.argv[1])
