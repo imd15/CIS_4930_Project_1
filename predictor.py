@@ -1,66 +1,51 @@
 import sys,time
-from sklearn import linear_model as lm  
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression  
 import numpy as np
+import pandas as pd
+from datetime import datetime
 import csv
 import matplotlib.pyplot as plt
-def predictor(fileName, ticker, column, t, graphFile):
-    columnVal = []
-    timeVal=[]
-    with open(infoFileName, "r") as infoFile:
-        reader = csv.DictReader(infoFile)
-        for row in reader:
-            if(row['Ticker'] == ticker):
-                columnVal.append(float(row[column]))
-                timeVal.append(row["Time"])
-
-    print(timeVal)
-    print(columnVal)
-    newTimeVal = []
-
-    for x in timeVal:
-        x = x[:2] + '.' + x[3:]
-        newTimeVal.append(float(x))
-    print(newTimeVal)
+def predictor(fileName, ticker, column, t, graphFile):    
+    curr = datetime.now()
+    convertToMin=int(curr.hour)*60 + int(curr.minute)
+    timeToPredict= convertToMin + t
     
-    holy = []
+    test = []
+    test.append(timeToPredict)
 
-    for x,y in zip(columnVal,newTimeVal):
-        print([x, y])
-        holy.append([x,y])
+    data = pd.read_csv(infoFileName)
+    df=data.loc[data['Ticker']==ticker]
 
-    print(holy)
+    X = df[[column]]
+    Y=df['Time'].str.split(':').apply([lambda a: int(a[0])*60+int(a[1])])
+
+    times= []
+    for time in range(convertToMin,timeToPredict):
+        times.append(time)
     
+    xTrain, xTest, yTrain, yTest = train_test_split(Y,X, test_size = 1/3, random_state = 0)
+
+    regr = LinearRegression()
+    regr.fit(xTrain,yTrain)
+    yPredict= regr.predict(xTest)
+    for time in range(convertToMin,timeToPredict):
+        b = plt.scatter(time, regr.predict([[time]]), color='green')
+        
+    
+    c = plt.scatter(xTrain,yTrain,color = 'red')
+    a = plt.plot(xTrain, regr.predict(xTrain), color = 'blue',)
+    plt.xlabel('Time in Minutes')
+    plt.ylabel(column)
+    plt.legend((a,c,b),('Line of best Fit','Observed data', 'Predicted data'))
+    plt.show()
+    plt.savefig(graphFile)
 
 
 if __name__ == "__main__":
-    ticker = "YI"               #argv[1]
-    infoFileName = "info.csv"   #argv[2]
-    graphFileName = ""          #argv[3]
-    column = "latestPrice"      #argv[4]
-    time = 10                   #argv[5]
-    #predictor(fileName,ticker,column, )
+    ticker = sys.argv[1]
+    infoFileName = sys.argv[2]
+    graphFileName = sys.argv[3]
+    column = sys.argv[4]
+    time = int(sys.argv[5])
     predictor(infoFileName,ticker,column,time,graphFileName)
-    
-    '''
-    regr = lm.LinearRegression()
-    regr.fit(holy,newTimeVal)
-    #predict = lm.predict()
-    plt.scatter(newTimeVal,columnVal,  color='black')
-    plt.title('Scatter plot pythonspot.com')
-    plt.xlabel('x')
-    plt.ylabel('y')
-    plt.show()
-    #print(regr.coef_)
-    #plt.show()
-
-
-    data = pd.read_csv(infoFileName)
-    index = data.index
-    col = data.columns
-    values=data.values
-    latest = ''+column
-    X=data.drop(['Close','Open','low','high'], axis=1)
-    #print(X)
-    print(X.loc[X['Ticker']==ticker])
-    print(X.values)
-    '''
