@@ -49,13 +49,17 @@ In short, this queries information from the .csv for a ticker at a particluar ti
 
 ###### This module accepts:
 - -verbose (flag)
-- True/False - whether to print the number of columns/rows
+- True/False
+	- whether to print the number of columns/rows
 - -file (flag)
-- info_filename - the file that read to gather the column information
+- info_filename
+	- the file that read to gather the column information
 - -ticker (flag)
-- ticker - the ticker that will be queried
+- ticker
+	- the ticker that will be queried
 - -time (flag)
-- time - the time that the ticker will be queried at (HH:MM)
+- time
+	- the time that the ticker will be queried at (HH:MM)
 
 ##### How to run:
 ```python3 query.py –verbose True/False –file info_filename –ticker ticker –time time```
@@ -67,11 +71,16 @@ This module predicts information for a specific ticker based off of historical d
 This module uses the *sklearn.linear model* to predict this. The information is saves and plots the historical variation in the value of col as well as the predicted values. 
 
 ###### This module accepts:
-- ticker - the ticker that is predicted
-- infoFilename - the file read to gather the historical data
-- graphFilename - the file that the graph will be created to
-- column - either latestPrice or latestVolume
-- time - the number of minutes that will be predicted
+- ticker
+	- the ticker that is predicted
+- infoFilename 
+	- the file read to gather the historical data
+- graphFilename
+	- the file that the graph will be created to
+- column
+	- either latestPrice or latestVolume
+- time
+	- the number of minutes that will be predicted
 
 	##### How to run:
 ```python3 predictor.py ticker infoFilename graphFilename column time```
