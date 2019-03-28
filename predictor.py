@@ -1,18 +1,24 @@
 import sys,time
+from sklearn.model_selection import train_test_split
 from sklearn import linear_model as lm  
 import numpy as np
+import pandas as pd
+import datetime
 import csv
 import matplotlib.pyplot as plt
 def predictor(fileName, ticker, column, t, graphFile):
+    '''
     columnVal = []
     timeVal=[]
+    timeInMinutes = []
     with open(infoFileName, "r") as infoFile:
         reader = csv.DictReader(infoFile)
         for row in reader:
             if(row['Ticker'] == ticker):
                 columnVal.append(float(row[column]))
-                timeVal.append(row["Time"])
+                timeVal.append(datetime.striptime(row["Time"],"%H:%M"))
 
+                
     print(timeVal)
     print(columnVal)
     newTimeVal = []
@@ -20,16 +26,35 @@ def predictor(fileName, ticker, column, t, graphFile):
     for x in timeVal:
         x = x[:2] + '.' + x[3:]
         newTimeVal.append(float(x))
-    print(newTimeVal)
+    #print(newTimeVal)
     
     holy = []
 
     for x,y in zip(columnVal,newTimeVal):
-        print([x, y])
+        #print([x, y])
         holy.append([x,y])
 
-    print(holy)
+    #print(holy)
+    '''
+    regr = lm.LinearRegression()
     
+    data = pd.read_csv(infoFileName)
+    df=data.loc[data['Ticker']==ticker]
+    print(df)
+    latest = ''+column
+
+    X = df[[latest]]
+    Y=df['Time'].str.split(':').apply(lambda a: int(a[0])*60+int(a[1]))
+
+    print(X)
+    print(Y)
+
+    data.plot(df,y=Y, style = 'o')
+    plt.xlabel('Time in Min')
+    plt.ylabel('Latest PRice')
+    plt.show()  
+    #print(X.loc[X['Ticker']==ticker])
+    #print(X.values)
 
 
 if __name__ == "__main__":
@@ -41,26 +66,4 @@ if __name__ == "__main__":
     #predictor(fileName,ticker,column, )
     predictor(infoFileName,ticker,column,time,graphFileName)
     
-    '''
-    regr = lm.LinearRegression()
-    regr.fit(holy,newTimeVal)
-    #predict = lm.predict()
-    plt.scatter(newTimeVal,columnVal,  color='black')
-    plt.title('Scatter plot pythonspot.com')
-    plt.xlabel('x')
-    plt.ylabel('y')
-    plt.show()
-    #print(regr.coef_)
-    #plt.show()
-
-
-    data = pd.read_csv(infoFileName)
-    index = data.index
-    col = data.columns
-    values=data.values
-    latest = ''+column
-    X=data.drop(['Close','Open','low','high'], axis=1)
-    #print(X)
-    print(X.loc[X['Ticker']==ticker])
-    print(X.values)
-    '''
+    
