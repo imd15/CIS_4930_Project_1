@@ -18,17 +18,6 @@ def Query(info_filename, the_time, ticker, column_names):
 
     while strftime("%H:%M") != the_time:
         continue
-        
-    URL = f"https://ws-api.iextrading.com/1.0/stock/{ticker}/quote/"
-    pureURLtext = r.get(URL).text
-    textToJson = json.loads(pureURLtext) #creates dict from what was in url
-    Titles = ["symbol","latestPrice", "latestVolume","close","open","low","high"]
-    timee = strftime("%H:%M")
-    L = [timee]
-    for i in Titles:
-        L.append(textToJson[i])
-    
-    return L
 
 
 if __name__ == "__main__":
