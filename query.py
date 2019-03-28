@@ -29,9 +29,6 @@ def Query(info_filename, the_time, ticker, column_names):
         L.append(textToJson[i])
     
     return L
-    
-
-    return L
 
 
 if __name__ == "__main__":

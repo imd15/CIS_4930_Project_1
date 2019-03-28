@@ -15,7 +15,6 @@ def UpdateStockInformation(ticker):
     L = [timee]
     for i in Titles:
         L.append(textToJson[i])
-    
     return L
 
 def indefiniteUpdate(ticker_file,info_filename, time_limit):
