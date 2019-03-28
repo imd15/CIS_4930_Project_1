@@ -16,37 +16,36 @@ def predictor(fileName, ticker, column, t, graphFile):
 
     data = pd.read_csv(infoFileName)
     df=data.loc[data['Ticker']==ticker]
-    print(df)
-    latest = ''+column
 
-    X = df[[latest]]
+    X = df[[column]]
     Y=df['Time'].str.split(':').apply([lambda a: int(a[0])*60+int(a[1])])
 
-    print(X)
-    print(Y)
+    times= []
+    for time in range(convertToMin,timeToPredict):
+        times.append(time)
+    
     xTrain, xTest, yTrain, yTest = train_test_split(Y,X, test_size = 1/3, random_state = 0)
 
     regr = LinearRegression()
     regr.fit(xTrain,yTrain)
     yPredict= regr.predict(xTest)
-
-    plt.scatter(xTrain,yTrain,color = 'red')
-    plt.plot(xTrain, regr.predict(xTrain), color = 'blue')
-    plt.xlabel('xxxxxxxxx')
-    plt.ylabel('yyyyyyyyy')
-    #plt.show()
+    for time in range(convertToMin,timeToPredict):
+        b = plt.scatter(time, regr.predict([[time]]), color='green')
+        
+    
+    c = plt.scatter(xTrain,yTrain,color = 'red')
+    a = plt.plot(xTrain, regr.predict(xTrain), color = 'blue',)
+    plt.xlabel('Time in Minutes')
+    plt.ylabel(column)
+    plt.legend((a,c,b),('Line of best Fit','Observed data', 'Predicted data'))
+    plt.show()
     plt.savefig(graphFile)
-
-    print(regr.predict([test]))
-    #print(X.loc[X['Ticker']==ticker])
-    #print(X.values)
 
 
 if __name__ == "__main__":
-    ticker = "YI"               #argv[1]
-    infoFileName = "info1.csv"   #argv[2]
-    graphFileName = "graph.png"          #argv[3]
-    column = "latestVolume"      #argv[4]
-    time = 10                   #argv[5]
-    #predictor(fileName,ticker,column, )
+    ticker = sys.argv[1]
+    infoFileName = sys.argv[2]
+    graphFileName = sys.argv[3]
+    column = sys.argv[4]
+    time = int(sys.argv[5])
     predictor(infoFileName,ticker,column,time,graphFileName)
