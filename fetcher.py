@@ -11,7 +11,7 @@ def UpdateStockInformation(ticker):
     pureURLtext = r.get(URL).text
     textToJson = json.loads(pureURLtext) #creates dict from what was in url
     Titles = ["symbol","latestPrice", "latestVolume","close","open","low","high"]
-    timee = strftime("%H:%M:%S")
+    timee = strftime("%H:%M")
     L = [timee]
     for i in Titles:
         L.append(textToJson[i])
